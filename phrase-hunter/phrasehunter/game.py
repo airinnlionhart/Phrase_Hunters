@@ -4,63 +4,49 @@ from .character import Character
 import random
 
 class Game():
-    """"""
+    """The class should include an initializer or def __init__ method that receives a 
+    phrases parameter and holds these phrases in an instance attribute on the game object."""
 
-    def __init__(self):
-        self.random_phrase = " "
-        
-
+    def __init__(self, phrases):
+        self.game = [Phrase(phrases.lower())]
+        self.current_phrase = self.game[random.randrange(len(self.game))]
+        self.current_lives = 5
+      
     def title(self):
-        print("Hangman")
+        print("Welecome to Phrase Hunters you mission is to guess the phrase one character at a time before your five lives run out")
+        print(self.current_phrase.the_word(''))   
 
-    def start(self):
-        pick_phrase = Phrase("hope you can guess this")
-        pick_phrase.add_to("try to guess a correct phrase")
-        random_phrase = pick_phrase.list_of_phrases[random.randrange(len(pick_phrase.list_of_phrases))]
-        theWord = ""
-        for a_letter in random_phrase:
-            if a_letter == " ":
-                theWord += " "
-            else:
-                theWord += "-"
-        lives = 5
-        print(theWord)
-        charChecks = Character(" ")
+    def start_game(self):
+
         while True:
-            count = 0
-            guess = input("Guess a leter:" ).lower()
-            charChecks.guess_validation(guess)
-            charChecks.duplicate_check(guess)
-            if charChecks.valid == True and charChecks.was_guessed == False:
-                for letter in random_phrase:
-                    if guess in letter:
-                        theWord = theWord[:count] + guess + theWord[count + 1:]
-                        count += 1
-                    else:
-                        count += 1
-                if guess not in random_phrase or guess not in theWord:
-                    lives -= 1
-                    print("You have "+str(lives)+" left")
-                print(theWord)
-                if "-" not in theWord:
-                    print("YOU WON!")
-                    keep_playing = input("Press enter to play again or type q to quit")
-                    if keep_playing == '':
-                        self.start()
-                        break
-                    else:
-                         break
-                if lives == 0:
-                    print("You lost this time but try agin")
-                    keep_playing = input("Press enter to play again or type q to quit")
-                    if keep_playing == '':
-                        self.start()
-                        break
-                    else:
-                         break
-            else:
-                pass
+            self.current_phrase.has_won() 
+            if self.current_phrase.win_game:
+                print("You have Won!!! great job!!!")
+                break
+            elif self.current_lives == 0:
+                print("Your are out of lives try again")
+                break        
+            else:        
+                guess = input("guess a letter: ")
+                self.current_phrase.duplicate_check(guess)
+                if self.current_phrase.valid:
+                    self.current_phrase.guess_validation(guess)
+                else:
+                    pass
+                if self.current_phrase.valid:
+                    before = self.current_phrase.display_results
+                    print(self.current_phrase.the_word(guess))
+                    after = self.current_phrase.display_results
+                    if before == after:
+                        self.current_lives -= 1
+                        print("Sorry that letter is not in the Phrase you have " + str(self.current_lives) + " lives remains")
+                else:
+                    pass
 
 
-              
+        
+# You will need at least 1 instance attribute to start the game:
+
+# An instance attribute that stores the current Phrase object and starts the game. You may think of this as the Active phrase being guessed against by the player while the game is running.
+# The Game instance might be responsible for things like: starting the game loop, getting player's input() guesses to pass to a Phrase object to perform its responsibilities against, determining if a win/loss happens after the player runs out of turns or the phrase is completely guessed.
 

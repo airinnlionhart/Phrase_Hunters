@@ -1,27 +1,43 @@
-
-# Create your Character class logic in here.
+# The class should include an initializer or def __init__ that receives a char parameter, which should be a single character string.
 class Character():
-    """Class to validate user input and check there guesses"""
 
-    def __init__(self, original):
-        self.original = [original.lower()]
-        self.was_guessed = False
-        self.valid = False
+	def __init__(self, original, **kwargs):
+ 
+# Hint: You will likely need at least two instance attributes:
+# An instance attribute to store the single char string character so the Character object will be able to remember the original character. You might call this instance attribute original, but that will be up to you.
+		self.original = original.lower()
+# An instance attribute to store a boolean value (True or False) of whether or not this letter has had a guess attempted against it. You can initialize this to False inside __init__ as any new Character object will start with a default of False meaning it has not been guessed before. You might name this instance attribute was_guessed, but that will also be up to you.
+		self.was_guessed = False
+# Any additional instance attributes you feel you need to store are up to you to decide on.
+		for key, value in kwargs.items():
+			setattr(self, key, value)
+# Hint: You will need at least two instance methods:
+# An instance method that will take a single string character guess as an argument when its called. 
+# The job of this instance method is to update the instance attribute storing the boolean value,
+# if the guess character is an exact match to the instance attribute storing the original char passed 
+# in when the Character object was created.
+	def guess_check(self, guess_character):
+		if guess_character == self.original:
+			self.was_guessed = True
 
 
-    def guess_validation(self, guess):
-        if len(guess) != 1 or guess.isalpha() == False:
-            print("whoops this doesnt look like a valid character try again")
-            self.valid = False
-        else:
-            self.valid = True
-        
+# An instance method that when called, will show the original character if the instance attribute was_guessed is True. 
+# Otherwise, the instance method should show an _ or underscore character to act as a hidden placeholder character.
+	def show_character(self):
+		if self.was_guessed == True:
+			return(self.original)
+		else:
+			if self.original == " ":
+				return(' ')
+			else:
+				return("_")		
+
+# The instance method names and their implementation are up to you to determine.
 
 
-    def duplicate_check(self, guessed):
-        if guessed in self.original:
-            self.was_guessed = True
-            print("whoops you already guessed this letter try again")
-        else:
-            self.was_guessed = False
-            self.original.append(guessed.lower())
+# The Character instance is responsible for holding the state of a given single character. 
+# You should ensure when you create instances of Character() 
+# that you only pass a character that is a single character or len(char) == 1. 
+# Anything more or less should be invalid and might cause you bugs in your code, 
+# especially if you are passing the user's input directly into the creation of the Character object.
+
